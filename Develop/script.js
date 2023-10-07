@@ -1,20 +1,16 @@
 
 $(function () {
-  currentHour = dayjs().hour()
+  var currentHour = dayjs().hour() 
+  var today = dayjs()
+  $('#currentDay').text(today.format('dddd, MMMM D YYYY')) 
 
   var saveItem = function (hourDiv) {
     hourID = (hourDiv.getAttribute("id"))
-    textArea = document.getElementById(hourID + "-text")
+    textArea = document.getElementById(hourID + '-text')
     localStorage.setItem(hourID, textArea.value)
+    console.log(textArea.value)
+    console.log('saved')
   }
-
-
-  $('.saveBtn').on('click', function(){saveItem(this.parentElement)})
-  
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
 
   var displayItems = function () {
 
@@ -62,10 +58,14 @@ $(function () {
         textArea = $('<textarea>')
         textArea.addClass("col-8 col-md-10 description")
         textArea.attr("rows", "3")
-        
+        textArea.attr("id", "hour-" + localHour + "-text" )
+        text = localStorage.getItem('hour-' + localHour)
+        textArea.text(text)
+
         saveButton = $('<button>')
         saveButton.addClass("btn saveBtn col-2 col-md-1")
         saveButton.attr("aria-label", "save")
+        saveButton.on('click', function(){saveItem(this.parentElement)})
 
         image = $('<i>')
         image.addClass("fas fa-save")
@@ -75,13 +75,7 @@ $(function () {
         itemDiv.append(hourDiv,textArea,saveButton)
         $('#container').append(itemDiv)
       }
-
-
   }
-
-
-  var today = dayjs()
-  $('#currentDay').text(today.format('dddd, MMMM D YYYY'))
 
 displayItems()
 });
